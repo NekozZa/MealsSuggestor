@@ -1,0 +1,16 @@
+<form action="/recipes" method="post" class="container rounded border w-25 h-50 p-3">
+    <div class="form-group">
+        <label for="" class="mb-2">Ingredients:</label>
+        <textarea name="ingredients" id="" class="form-control"></textarea>
+    </div>
+    <button class="btn btn-primary mt-3">Submit</button>
+</form>
+
+<script>
+    const inputField = document.querySelector('textarea')
+    inputField.onkeyup = (e) => {
+        if (e.keyCode == 13) {
+            inputField.value += '- '
+        }
+    }
+</script>
