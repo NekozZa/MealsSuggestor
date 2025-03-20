@@ -12,7 +12,11 @@ app.get('/', (req, res) => {
     res.render('index.ejs')
 })
 
-app.post('/recipes', (req, res) => {
+app.get('/ingredients', (req, res) => {
+    res.render('./partials/ingredients.ejs')
+})
+
+app.post('/meals', (req, res) => {
     axios.get('https://api.spoonacular.com/recipes/findByIngredients', {
         params: {
             apiKey: process.env.API_KEY,
