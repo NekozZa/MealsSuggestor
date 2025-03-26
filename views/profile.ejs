@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        * {
+            font-family: "Poppins", sans-serif;
+        }
+
+        
+        i {
+            font-size: 28px;
+            border-bottom: 1px solid transparent;
+        }
+
+        i:hover{
+            cursor: pointer;
+            color: blue
+        }
+
+        .selected {
+            color: blue;
+            border-bottom: 1px solid blue;
+        }
+
+        .img-holder {
+            cursor: pointer;
+            transition: background-color 0.5s ease;
+        }
+
+        .img-holder p {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .img-holder:hover {
+            background-color: rgb(0, 0, 0, 0.1);
+        }
+
+        .img-holder:hover p {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+        .enrolment-info {
+            display: none;
+        }
+
+    </style>
+</head>
+<body style="height: 100vh; background: linear-gradient(45deg, #d9e98c, #F2F6D0)">
+    <%- include('./partials/navbar.ejs') %>
+
+    <div class="w-100 mt-4">
+        <div class="container border rounded expanded" style="background-color: white;">
+            <div class="row border-bottom mb-5 p-0 justify-content-center align-items-center" style="height: 6vh;">
+                <i class="bi bi-person w-auto selected profile-tab"></i>
+                <i class="bi bi-people w-auto enrolment-tab"></i>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-3 px-5 border-end d-flex flex-column align-items-center">
+                    <input type="file" id="avatar" hidden>
+                    <label for="avatar" class="w-100 border rounded img-holder d-flex justify-content-center align-items-center" style="height: 22vh;">
+                        <p>Upload Image</p>
+                        <img src="" alt="">
+                    </label>
+                </div>
+
+                <div class="col-9 form-info">
+                    <p>Profile Information</p>
+                    <form action="">
+                        <div class="row mb-2">
+                            <div class="form-group col-6">
+                                <label for="" class="mb-2">First Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="" class="mb-2">Last Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="form-group col-6">
+                                <label for="" class="mb-2">Specialized Diet</label>
+                                <select class="form-control">
+                                  <option selected>Choose...</option>
+                                  <option>Normal</option>
+                                  <option>Keto</option>
+                                  <option>Diet</option>
+                                  <option>Paleo</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="" class="mb-2">Maximum Enrollment</label>
+                                <input type="number" class="form-control" max="10" min="3">
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="form-group col-12">
+                                <label for="" class="mb-2">Brief Description</label>
+                                <textarea name="" id="" class="form-control" style="height: 16vh; resize: none;"></textarea>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+
+                <div class="col-9 enrolment-info">
+                    <div class="row">
+                        <div class="container">
+                            <div class="w-100 border rounded px-3 mb-3 d-flex justify-content-between align-items-center" style="height: 6vh;">
+                                <p class="m-0">John Doe</p>
+                                <div>
+                                    <i class="bi bi-x-square" style="color: red"></i>
+                                </div>
+                            </div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded mb-3" style="height: 6vh;"></div>
+                            <div class="w-100 border rounded" style="height: 6vh;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3 form-btns form-info">
+                <div class="form-group d-flex justify-content-end">
+                    <button class="btn btn-outline-primary w-auto me-2">Update</button>
+                    <button class="btn btn-outline-danger w-auto">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const profile = document.querySelector('.profile-tab')
+        const enrolment = document.querySelector('.enrolment-tab')
+        const tabs = [profile, enrolment]
+
+        profile.onclick = (e) => {
+            tabs.forEach((tab) => {
+                tab.classList.remove('selected')
+            })
+
+            profile.classList.add('selected')
+            const enrolmentInfo = document.querySelector('.enrolment-info')
+            enrolmentInfo.style.display = 'none'
+
+            const formInfos = document.querySelectorAll('.form-info')
+            formInfos.forEach((formInfo) => {
+                formInfo.style.display = 'block'
+            })
+        }
+
+        enrolment.onclick = (e) => {
+            tabs.forEach((tab) => {
+                tab.classList.remove('selected')
+            })
+
+            enrolment.classList.add('selected')
+            const enrolmentInfo = document.querySelector('.enrolment-info')
+            enrolmentInfo.style.display = 'block'
+
+            const formInfos = document.querySelectorAll('.form-info')
+            formInfos.forEach((formInfo) => {
+                formInfo.style.display = 'none'
+            })
+        }
+
+
+    </script>
+</body>
+</html>
