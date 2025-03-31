@@ -23,8 +23,14 @@ app.post('/meals', async (req, res) => {
     const params = new URLSearchParams({apiKey: process.env.API_KEY, ...req.body})
     const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?${params}`, {method: 'GET'})
     const data = await response.json()
-    console.log(data)
     res.json({meals: data})
+})
+
+app.get('/meals/:id', async (req, res) => {
+    const params = new URLSearchParams({apiKey: process.env.API_KEY})
+    const response = await fetch(`https://api.spoonacular.com/recipes/${req.params.id}/information?${params}`, {method: 'GET'})
+    const data = await response.json()
+    res.json(data)
 })
 
 app.get('/profile', (req, res) => {

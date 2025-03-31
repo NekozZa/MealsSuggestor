@@ -28,17 +28,40 @@
 <body style="height: 100vh;"> 
     <%- include('./partials/navbar.ejs') %>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Ingredients</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
     <div class="container h-100">
         <div class="row h-auto mb-5">
             <div class="col-12">
-                <%- include('./partials/searchBar.ejs') %>
+                <form class="form-inline w-50 m-auto mt-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" name="ingredients" placeholder="rice, egg">
+                        <button class="btn btn-outline-success find-btn">Find</button>
+                    </div>
+                </form>
             </div>
         </div>
     
         <div class="row h-75">
             <div class="col-12">
                 <div class="container-fluid p-0">
-                    <div class="row meals-row">
+                    <div class="row meals-row justify-content-center">
                         
                     </div>
                 </div>
@@ -46,48 +69,7 @@
         </div>
     </div>
     
-    <script>
-    
-        const btn = document.querySelector('.find-btn')
-        const input = document.querySelector('input')
-        
-        btn.onclick = async (e) => {
-            e.preventDefault()
-            const res = await fetch('/meals', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ingredients: input.value, number: 8})
-            })
-    
-            const data = await res.json()
-            const row = document.querySelector('.meals-row')
-            row.innerHTML = ''  
-    
-            data['meals'].forEach((meal) => {
-                const card = createCard(meal['title'], meal['image'])
-                row.appendChild(card)
-            })
-        } 
-    
-        function createCard(title, imgSrc) {
-            const holder = document.createElement('div')
-            const card = document.createElement('div')
-            const thumb = document.createElement('img')
-            const body = document.createElement('div')
-            holder.classList = 'w-auto col-md-3 mb-5'
-            card.classList = 'card shadow'
-            thumb.classList = 'card-img-top'
-            thumb.src = imgSrc
-            body.classList = 'card-body'
-            body.innerHTML = `<h5 class="text-center text-weight-normal">${title}</h5>`
-    
-            holder.appendChild(card)
-            card.appendChild(thumb)
-            card.appendChild(body)
-            card.style.width = '18rem'
-            card.style.height = '20rem'
-            return holder
-        }
-    </script>
+    <script src="./js/searcher.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
