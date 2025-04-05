@@ -1,12 +1,9 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import fs from 'fs'
-import cors from 'cors'
 
 const app = express()
 const PORT = 3000
-
-const ACCOUNT_FILE_PATH = './public/data/accounts.json'
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -41,41 +38,97 @@ app.get('/profile', (req, res) => {
     res.render('profile.ejs')
 })
 
-app.get("/accounts", (req,res) => {
-    fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
-        res.json(JSON.parse(data));
-    });
-});
 
-app.put("/updateAccount", (req,res) => {
-    const {id, username, password, email} = req.body;
-    fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
-        const accounts = JSON.parse(data);
-        const acc = accounts.find(acc => acc.id == id);
+app.get('/login', (req, res) => {
+    res.render('login.ejs')
+})
 
-        acc.username = username || acc.username
-        acc.password = password || acc.password;
-        acc.email = email || acc.email;
+app.post('/login',(req, res) =>{
+    const user = req.body['username']
+    const passwordInput = req.body['password']
+    let data = {}
+    try{
+        const fileData = fs.readFileSync('accounts.json', 'utf8')
+        data = JSON.parse(fileData)
+    }catch(error){
+        console.log("File is not exits")
+    }
+    
+    if(!data.some(account => account.username === user)){
+        return res.json({errorMess: true});
+    }
+    const account = data.find(account => account.username === user);
+    
+    if(account.password !== passwordInput){
+        return res.json({errorMess: true});
+    }
+    if(account.role === "admin"){
+        return res.json({isAdmin: true});
+    }
+    const randomChar = account.apiKey
+    res.json({apiKey: randomChar})
+})
 
-        fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
-            console.log("Successfully")
-        });
-    });
-});
+app.post('/register', (req, res) => {
+    const user = req.body['username']
+    const email = req.body['email']
+    const passwordInput = req.body['password']
+    const roleSelected = req.body['role']
 
-app.delete("/deleteAccount", (req,res) => {
-    const {ids} = req.body;
-    fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
-        const accounts = JSON.parse(data).filter((acc) => {
-            return !ids.some((id) => acc.id == id);
-        });
+    console.log(req.body)
 
-        fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
-            console.log("Successfully")
-        });
-    });    
-});
+    let randomChar = randomString(10)
+    let data = []
+    try{
+        const fileData = fs.readFileSync('accounts.json', 'utf8')
+        data = JSON.parse(fileData)
+    }catch(error){
+        console.log("File is not exits")
+    }
+
+    if(user == null || email == null || passwordInput == null){
+        return res.json({errorMess: true});
+    }
+
+    if(data.some(account => account.username === user)){
+        return res.json({errorMess: true});
+    }
+
+    if(passwordInput.length < 8){
+        return res.json({errorMess: true});
+    }
+
+    let id = data.length + 1
+
+    while(true){
+        if(data.find(account => account.id == id)){
+            id = id + 1
+        }else{
+            break
+        }
+    }
+    
+    if(roleSelected === "nutritionist"){
+        const interviewDate = req.body['interviewDate']
+        data.push({id:id, username:user, password: passwordInput, email: email, role: "normalcustomer", interviewDate: interviewDate}) 
+    }else{
+        data.push({id:id, username:user, password: passwordInput, email: email, role: roleSelected})
+    }
+    
+    fs.writeFileSync('accounts.json', JSON.stringify(data, null, 2), 'utf8')
+
+    res.json({apiKey: randomChar})
+})
 
 app.listen(PORT, () => {
     console.log('http://localhost:3000/')
 })
+
+function randomString(length){
+    const char = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    let res = ''
+    for(let i = 0; i < length; i++){
+        res += char.charAt(Math.floor(Math.random() * char.length))
+    }
+    return res
+}

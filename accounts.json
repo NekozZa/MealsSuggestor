@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "12324567",
+    "email": "admin@gmail.com",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "username": "admin2",
+    "password": "admin123",
+    "email": "admin2@gmail.com",
+    "role": "admin"
+  },
+  {
+    "id": 4,
+    "username": "VanNguyen",
+    "password": "van12345",
+    "email": "van@gmail.com",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 5,
+    "username": "VuNguyen",
+    "password": "1234567",
+    "email": "Vu@gmail.com",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 6,
+    "username": "NguyenHuy",
+    "password": "huy123456",
+    "email": "huy@gmail.com",
+    "role": "normalcustomer",
+    "interviewDate": "2025-04-10"
+  },
+  {
+    "id": 7,
+    "username": "NguyenAn",
+    "password": "an123456",
+    "email": "an@gmail.com",
+    "role": "normalcustomer",
+    "interviewDate": "2025-04-15"
+  }
+]
