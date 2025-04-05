@@ -38,7 +38,6 @@ app.get('/profile', (req, res) => {
     res.render('profile.ejs')
 })
 
-
 app.get('/login', (req, res) => {
     res.render('login.ejs')
 })
@@ -74,8 +73,6 @@ app.post('/register', (req, res) => {
     const email = req.body['email']
     const passwordInput = req.body['password']
     const roleSelected = req.body['role']
-
-    console.log(req.body)
 
     let randomChar = randomString(10)
     let data = []
@@ -114,7 +111,7 @@ app.post('/register', (req, res) => {
     }else{
         data.push({id:id, username:user, password: passwordInput, email: email, role: roleSelected})
     }
-    
+
     fs.writeFileSync('accounts.json', JSON.stringify(data, null, 2), 'utf8')
 
     res.json({apiKey: randomChar})
