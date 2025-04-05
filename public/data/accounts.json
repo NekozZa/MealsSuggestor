@@ -1,26 +1,61 @@
 [
   {
     "id": 1,
-    "username": "jane_smith_cut",
-    "password": "securepassword123",
-    "email": "jane.smith@example.com"
+    "username": "gayn",
+    "email": "nutritionist4@example.com",
+    "password": "admin123",
+    "interviewDate": "2025-12-04",
+    "role": "normalcustomer"
   },
   {
     "id": 2,
-    "username": "tuyet",
-    "password": "password123",
-    "email": "jane.smith@example.com"
+    "username": "gay2",
+    "email": "nutritionist6@example.com",
+    "password": "password1",
+    "role": "normalcustomer"
   },
   {
     "id": 3,
-    "username": "gay",
-    "password": "secure123",
-    "email": "jane.smith@example.com"
+    "username": "user2",
+    "email": "nutritionist7@example.com",
+    "password": "password2",
+    "interviewDate": "2025-01-04",
+    "role": "normalcustomer"
   },
   {
     "id": 4,
-    "username": "ok",
+    "username": "nutritionist1",
+    "email": "nutritionist8@example.com",
+    "password": "nutri123",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 5,
+    "username": "nguyenvana",
+    "email": "vana@gmail.com",
     "password": "123",
-    "email": "jane.smith@example.com"
+    "role": "normalcustomer",
+    "interviewDate": "2025-04-10"
+    },
+  {
+    "id": 6,
+    "username": "user3",
+    "email": "user3@example.com",
+    "password": "password3",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 7,
+    "username": "user4",
+    "email": "user4@example.com",
+    "password": "password4",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 8,
+    "username": "user5",
+    "email": "user5@example.com",
+    "password": "password5",
+    "role": "normalcustomer"
   }
 ]

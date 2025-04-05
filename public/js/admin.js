@@ -7,7 +7,7 @@ function getAccounts(){
         table.innerHTML = "";
         accounts.forEach(acc => {
             let row = `
-                <tr id="row-${acc.id}">
+                <tr id="row-acc-${acc.id}">
                     <td><input type="checkbox" class="accountCheckbox" value="${acc.id}"></td>
                     <td>${acc.username}</td>
                     <td>${acc.email}</td>    
@@ -24,13 +24,15 @@ function getNutritionistRequests(){
     fetch(`/nutritionistRequests`)
     .then(res => res.json())
     .then(requests => {
+        console.log(requests)
         let table = document.getElementById("nutritionistTable");
         table.innerHTML = "";
         requests.forEach(req => {
             let row = `
-                <tr id="row-${req.id}">
-                    <td>${req.name}</td>
+                <tr id="row-req-${req.id}">
+                    <td>${req.username}</td>
                     <td>${req.email}</td>
+                    <td>${req.interviewDate}</td>
                     <td>
                         <button class="btn btn-sm btn-success" onclick="approveRequest('${req.id}')">Approve</button>
                         <button class="btn btn-sm btn-danger" onclick="rejectRequest('${req.id}')">Reject</button>    
@@ -62,10 +64,13 @@ function updateAccount(){
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({id: id.value, username: username.value, email: email.value, password: password.value})
     })
-    .then(() => {
-        const row = document.getElementById(`row-${id}`)
-        row.querySelector("td:nth-child(2)").textContent = username.value
-        row.querySelector("td:nth-child(3)").textContent = email.value
+    .then(res => res.json())
+    .then(data => {
+        if(data.account){
+            const row = document.getElementById(`row-acc-${id.value}`)
+            row.cells[1].textContent = username.value
+            row.cells[2].textContent = email.value
+        }
     })
 }
 
@@ -100,7 +105,7 @@ function approveRequest(requestId){
         body: JSON.stringify({id: requestId})
     })
     .then(() => {
-        const row = document.getElementById(`row-${requestId}`)
+        const row = document.getElementById(`row-req-${requestId}`)
         row.remove()
     })
 }
@@ -112,7 +117,7 @@ function rejectRequest(requestId){
         body: JSON.stringify({id: requestId})
     })
     .then(() => {
-        const row = document.getElementById(`row-${requestId}`)
+        const row = document.getElementById(`row-req-${requestId}`)
         row.remove()
     })
 }

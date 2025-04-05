@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import fs from 'fs'
-import cors from 'cors'
+
 
 const app = express()
 const PORT = 3000
@@ -17,6 +17,10 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 
 app.get('/', (req, res) => {
+    res.render('admin.ejs')
+})
+
+app.get('/admin', (req, res) => {
     res.render('admin.ejs')
 })
 
@@ -60,7 +64,7 @@ app.put("/updateAccount", (req,res) => {
         acc.email = email || acc.email;
 
         fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
-            res.json({updatedAccount: acc})
+            res.json({account: acc})
             console.log("Successfully")
         })
     })
@@ -68,9 +72,12 @@ app.put("/updateAccount", (req,res) => {
 
 app.delete("/deleteAccount", (req,res) => {
     const {ids} = req.body;
+
     fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
-        const accounts = JSON.parse(data).filter(acc => !ids.includes(acc.id)) 
+        const accounts = JSON.parse(data).filter(acc => !ids.includes(`${acc.id}`)) 
+        console.log(accounts)
         fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+            console.log(ids)
             res.json({deleteIds: ids})
             console.log("Successfully")
         })
@@ -78,20 +85,39 @@ app.delete("/deleteAccount", (req,res) => {
 })
 
 app.get(`/nutritionistRequests`, (req, res) => {
-    fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
-        res.json(JSON.parse(data))
+    fs.readFile(ACCOUNT_FILE_PATH, 'utf8', (err,data) =>{
+        const accounts = JSON.parse(data).filter(acc => acc.interviewDate !== undefined && acc.role == 'normalcustomer')
+        console.log(accounts)
+    fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+        fs.readFile(NUTRITIONIST_FILE_PATH,'utf8',(err,data) => {
+            res.json(JSON.parse(data))
+        })
     })
+    })
+    
 })
 
 app.post(`/approveNutritionistRequest`,(req,res) => {
     const {id} = req.body
     fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
         const requests = JSON.parse(data).filter(req => req.id != id)
-        fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(requests,null,2), () => {
+        fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(requests,null,2), () => {})
+        
+    })
+    fs.readFile(ACCOUNT_FILE_PATH,'utf8', (err,data) => {
+        const accounts = JSON.parse(data)
+        const user = accounts.find(acc => acc.id == id)
+        
+        if (user) {
+            console.log(user)
+            user.role = 'nutritionist'
+            delete user.interviewDate
+        }
+        fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
             res.json({approvedId: id})
         })
     })
-}) 
+})
 
 app.post(`/rejectNutritionistRequest`,(req,res) => {
     const {id} = req.body
