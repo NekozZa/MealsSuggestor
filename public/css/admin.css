@@ -34,6 +34,10 @@ button{
     border: none;
 }
 
+.btn-success{
+    background: green;
+    border: none;
+}
 .modal-content{
     border-radius: 10px;
 }

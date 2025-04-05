@@ -1,8 +1,26 @@
 [
   {
-    "id": 4,
-    "username": "jane_smith",
+    "id": 1,
+    "username": "jane_smith_cut",
     "password": "securepassword123",
+    "email": "jane.smith@example.com"
+  },
+  {
+    "id": 2,
+    "username": "tuyet",
+    "password": "password123",
+    "email": "jane.smith@example.com"
+  },
+  {
+    "id": 3,
+    "username": "gay",
+    "password": "secure123",
+    "email": "jane.smith@example.com"
+  },
+  {
+    "id": 4,
+    "username": "ok",
+    "password": "123",
     "email": "jane.smith@example.com"
   }
 ]

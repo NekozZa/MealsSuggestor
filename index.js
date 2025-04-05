@@ -7,6 +7,8 @@ const app = express()
 const PORT = 3000
 
 const ACCOUNT_FILE_PATH = './public/data/accounts.json'
+const NUTRITIONIST_FILE_PATH = './public/data/nutritionistRequests.json'
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -58,23 +60,48 @@ app.put("/updateAccount", (req,res) => {
         acc.email = email || acc.email;
 
         fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+            res.json({updatedAccount: acc})
             console.log("Successfully")
-        });
-    });
-});
+        })
+    })
+})
 
 app.delete("/deleteAccount", (req,res) => {
     const {ids} = req.body;
     fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
-        const accounts = JSON.parse(data).filter((acc) => {
-            return !ids.some((id) => acc.id == id);
-        });
-
+        const accounts = JSON.parse(data).filter(acc => !ids.includes(acc.id)) 
         fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+            res.json({deleteIds: ids})
             console.log("Successfully")
-        });
-    });    
-});
+        })
+    })    
+})
+
+app.get(`/nutritionistRequests`, (req, res) => {
+    fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
+        res.json(JSON.parse(data))
+    })
+})
+
+app.post(`/approveNutritionistRequest`,(req,res) => {
+    const {id} = req.body
+    fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
+        const requests = JSON.parse(data).filter(req => req.id != id)
+        fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(requests,null,2), () => {
+            res.json({approvedId: id})
+        })
+    })
+}) 
+
+app.post(`/rejectNutritionistRequest`,(req,res) => {
+    const {id} = req.body
+    fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
+        const requests = JSON.parse(data).filter(req => req.id != id)
+        fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(requests,null,2), () => {
+            res.json({rejectedId: id})
+        })
+    })
+})
 
 app.listen(PORT, () => {
     console.log('http://localhost:3000/')
