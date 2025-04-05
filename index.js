@@ -10,11 +10,11 @@ app.use(express.static('public'))
 app.set('view engine', 'ejs')
 app.use(express.json())
 
-const ACCOUNT_FILE_PATH = './public/data/accounts.json'
-const NUTRITIONIST_FILE_PATH = './public/data/nutritionistRequests.json'
+const ACCOUNT_FILE_PATH = './accounts.json'
+const NUTRITIONIST_FILE_PATH = './nutritionistRequests.json'
 
 app.get('/', (req, res) => {
-    res.render('admin.ejs')
+    res.render('index.ejs')
 })
 
 app.get('/admin', (req, res) => {
@@ -53,7 +53,7 @@ app.post('/login',(req, res) =>{
     const passwordInput = req.body['password']
     let data = {}
     try{
-        const fileData = fs.readFileSync('accounts.json', 'utf8')
+        const fileData = fs.readFileSync(ACCOUNT_FILE_PATH, 'utf8')
         data = JSON.parse(fileData)
     }catch(error){
         console.log(error)
@@ -80,14 +80,13 @@ app.post('/register', (req, res) => {
     const passwordInput = req.body['password']
     const roleSelected = req.body['role']
 
-
     let randomChar = randomString(10)
     let data = []
     try{
         const fileData = fs.readFileSync('accounts.json', 'utf8')
         data = JSON.parse(fileData)
     }catch(error){
-        console.log(error)
+        console.log("File is not exits")
     }
 
     if(user == null || email == null || passwordInput == null){
@@ -101,7 +100,6 @@ app.post('/register', (req, res) => {
     if(passwordInput.length < 8){
         return res.json({errorMess: true});
     }
-
     let id = data.length + 1
 
     while(true){
@@ -118,14 +116,8 @@ app.post('/register', (req, res) => {
     }else{
         data.push({id:id, username:user, password: passwordInput, email: email, role: roleSelected})
     }
-
     fs.writeFileSync('accounts.json', JSON.stringify(data, null, 2), 'utf8')
-
     res.json({apiKey: randomChar})
-
-    fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
-        res.json({account: acc})
-    })
 })
 
 app.get("/accounts", (req, res) => {

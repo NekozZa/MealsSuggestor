@@ -42,5 +42,33 @@
     "email": "an@gmail.com",
     "role": "normalcustomer",
     "interviewDate": "2025-04-15"
+  },
+  {
+    "id": 8,
+    "username": "TienTran",
+    "password": "manhuquaqua",
+    "email": "tientran@gmail.com",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 9,
+    "username": "ManhQua",
+    "password": "quamanhne",
+    "email": "sieucapmanh@gmail.com",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 10,
+    "username": "username",
+    "password": "123123123",
+    "email": "email@gmail.com",
+    "role": "normalcustomer"
+  },
+  {
+    "id": 11,
+    "username": "SieuManhMot",
+    "password": "123123123",
+    "email": "mottoisemanh@gmail.com",
+    "role": "normalcustomer"
   }
 ]

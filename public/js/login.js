@@ -28,7 +28,7 @@ const errorLogin = document.querySelector('#alert-login')
 const loginBtn = document.querySelector('.login form button')
 
 
-loginForm.onsubmit = async (e) => {
+loginForm.onsubmit = (e) => {
     e.preventDefault()
 }
 
@@ -41,14 +41,16 @@ loginBtn.onclick = async (e) => {
     })
 
     const data = await response.json()
-    if(data.error){
+
+    if (data['errorMess']) {
         errorLogin.style.display = "block"
-    }else{
+    } else {
         errorLogin.style.display = "none"
         sessionStorage.setItem('apiKey', data.apiKey)
-        if(data.isAdmin){
+        
+        if (data.isAdmin) {
             window.location.href = '/admin'
-        }else{
+        } else {
             window.location.href = '/'
         }
     }
@@ -64,9 +66,10 @@ const errorRegister = document.querySelector('#alert-reg')
 const registerBtn = document.querySelector('.register form button')
 const dateInterviewInput = document.querySelector('#date')
 
-registerForm.onsubmit = async (e) => {
+registerForm.onsubmit = (e) => {
     e.preventDefault()
 }
+
 passRegister.onkeydown = async (e) =>{
     if(passRegister.value.length < 8){
         errorRegister.innerHTML = "The password at least 8 characters!"
@@ -82,13 +85,15 @@ registerBtn.onclick = async (e) => {
     selected = document.querySelector('input[name="role"]:checked')
 
     let response
-    console.log(dateInterviewInput.value)
+
     if(selected.value === "nutritionist"){
         response = await fetch('/register', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({username: nameRegister.value, email: emailRegister.value, password: passRegister.value, role: selected.value, interviewDate: dateInterviewInput.value})
         })
+
+        console.log(response)
     }else{
         response = await fetch('/register', {
             method: 'POST',
@@ -104,7 +109,7 @@ registerBtn.onclick = async (e) => {
         errorRegister.innerHTML = "The username is exits!"
         errorRegister.style.display = "block"
     
-    }else{
+    } else {
         container.classList.remove('active');
         errorRegister.style.display = "none"
         sessionStorage.setItem('apiKey', data.apiKey)
