@@ -7,12 +7,18 @@ const PORT = 3000
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
-
 app.set('view engine', 'ejs')
 app.use(express.json())
 
+const ACCOUNT_FILE_PATH = './public/data/accounts.json'
+const NUTRITIONIST_FILE_PATH = './public/data/nutritionistRequests.json'
+
 app.get('/', (req, res) => {
-    res.render('index.ejs')
+    res.render('admin.ejs')
+})
+
+app.get('/admin', (req, res) => {
+    res.render('admin.ejs')
 })
 
 app.get('/searcher', (req, res) => {
@@ -50,7 +56,7 @@ app.post('/login',(req, res) =>{
         const fileData = fs.readFileSync('accounts.json', 'utf8')
         data = JSON.parse(fileData)
     }catch(error){
-        console.log("File is not exits")
+        console.log(error)
     }
     
     if(!data.some(account => account.username === user)){
@@ -74,13 +80,14 @@ app.post('/register', (req, res) => {
     const passwordInput = req.body['password']
     const roleSelected = req.body['role']
 
+
     let randomChar = randomString(10)
     let data = []
     try{
         const fileData = fs.readFileSync('accounts.json', 'utf8')
         data = JSON.parse(fileData)
     }catch(error){
-        console.log("File is not exits")
+        console.log(error)
     }
 
     if(user == null || email == null || passwordInput == null){
@@ -115,6 +122,89 @@ app.post('/register', (req, res) => {
     fs.writeFileSync('accounts.json', JSON.stringify(data, null, 2), 'utf8')
 
     res.json({apiKey: randomChar})
+
+    fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+        res.json({account: acc})
+    })
+})
+
+app.get("/accounts", (req, res) => {
+    fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
+        res.json(JSON.parse(data));
+    });
+});
+
+app.put("/updateAccount", (req, res) => {
+    const {id, username, password, email} = req.body;
+    fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
+        const accounts = JSON.parse(data);
+        const acc = accounts.find(acc => acc.id == id);
+
+        acc.username = username || acc.username
+        acc.password = password || acc.password;
+        acc.email = email || acc.email;
+
+        fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+            res.json({account: acc})
+        })
+    })
+})
+
+app.delete("/deleteAccount", (req, res) => {
+    const {ids} = req.body;
+
+    fs.readFile(ACCOUNT_FILE_PATH, "utf8", (err,data) => {
+        const accounts = JSON.parse(data).filter(acc => !ids.includes(`${acc.id}`)) 
+
+        fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+            res.json({deleteIds: ids})
+        })
+    })    
+})
+
+app.get(`/nutritionistRequests`, (req, res) => {
+    fs.readFile(ACCOUNT_FILE_PATH, 'utf8', (err,data) =>{
+        const accounts = JSON.parse(data).filter(acc => acc.interviewDate !== undefined && acc.role == 'normalcustomer')
+
+    fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+        fs.readFile(NUTRITIONIST_FILE_PATH,'utf8',(err,data) => {
+            res.json(JSON.parse(data))
+        })
+    })
+    })
+    
+})
+
+app.post(`/approveNutritionistRequest`,(req, res) => {
+    const {id} = req.body
+    fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
+        const requests = JSON.parse(data).filter(req => req.id != id)
+        fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(requests,null,2), () => {})    
+    })
+    
+    fs.readFile(ACCOUNT_FILE_PATH,'utf8', (err, data) => {
+        const accounts = JSON.parse(data)
+        const user = accounts.find(acc => acc.id == id)
+        
+        if (user) {
+            user.role = 'nutritionist'
+            delete user.interviewDate
+        }
+
+        fs.writeFile(ACCOUNT_FILE_PATH, JSON.stringify(accounts,null,2), () => {
+            res.json({approvedId: id})
+        })
+    })
+})
+
+app.post(`/rejectNutritionistRequest`,(req,res) => {
+    const {id} = req.body
+    fs.readFile(NUTRITIONIST_FILE_PATH, 'utf8', (err,data) => {
+        const requests = JSON.parse(data).filter(req => req.id != id)
+        fs.writeFile(NUTRITIONIST_FILE_PATH, JSON.stringify(requests,null,2), () => {
+            res.json({rejectedId: id})
+        })
+    })
 })
 
 app.listen(PORT, () => {
