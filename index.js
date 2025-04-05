@@ -15,7 +15,7 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.render('admin.ejs')
+    res.render('index.ejs')
 })
 
 app.get('/searcher', (req, res) => {
